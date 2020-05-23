@@ -3,5 +3,9 @@
 }
 
 .table-container {
-  padding: 200px;
+  /*padding: 200px;*/
+}
+
+.refresh-button {
+  margin-right: 100%;
 }
