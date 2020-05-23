@@ -1,0 +1,15 @@
+.widget-container {
+    margin: 5px 10px;
+}
+
+.widget--align-right {
+    text-align: right;
+}
+
+.widget--align-left {
+    text-align: right;
+}
+
+.widget--align-center {
+    text-align: center;
+}
