@@ -8,6 +8,7 @@ import Navbar from "../../Components/navbar";
 import { AppLayout } from '../../Components/AppLayout';
 import { withRouter } from 'react-router-dom';
 import { VIEW_FORM_GENERATOR } from '../../constants';
+import Spinner from '../../Components/Spinner';
 
 export class TaskList extends Component {
   constructor(props) {
@@ -100,6 +101,7 @@ export class TaskList extends Component {
                     <th>Process Name</th>
                   </tr>
                   </thead>
+
                   <tbody className="tbody">
                   {!loading ? (
                     taskList.map((task) => {
@@ -122,8 +124,8 @@ export class TaskList extends Component {
                   )}
                   </tbody>
                 </table>
+                {loading && <Spinner /> }
               </div>
-
             </div>
             <div className="col">
             </div>

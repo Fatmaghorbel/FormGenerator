@@ -6,13 +6,13 @@ import './nav-bar.css'
 
 const Navbar = ({title}) => {
   return (
-    <nav class="navbar navbar-dark bg-dark">
-      <a class="navbar-brand " href="#">
+    <nav className="navbar navbar-dark bg-dark">
+      <a className="navbar-brand " href="#">
         <img
           src="/bonita-logo.png"
           width="30"
           height="30"
-          class="d-inline-block nav-bar__brand-img"
+          className="d-inline-block nav-bar__brand-img"
           alt=""
         />
         {title}

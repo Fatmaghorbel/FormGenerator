@@ -1,45 +1,17 @@
 import React, { Component } from "react";
-import "./form.css";
-import { AppLayout } from '../../Components/AppLayout';
 import { withRouter } from 'react-router-dom';
+import { AppLayout } from '../../Components/AppLayout';
 import { get } from '../../services/apiRest';
 import Widget from '../../Components/widgets/Widget';
+import { buildInitStateRecursively, getFormElementsRecursively } from '../../services/form';
+import "./form.css";
+import Spinner from '../../Components/Spinner';
 
 class Form extends Component {
   constructor(props) {
     super(props);
-    this.state = {inputs: []};
+    this.state = { inputs: [], loading: false };
   }
-
-  buildInitStateRecursively = function (input) {
-    var initState = {};
-    (Array.isArray(input) ? input : input.inputs).forEach(input => {
-      if (input.inputs.length === 0) {
-        initState = { ...initState, [input.name]: null }
-      } else {
-        this.buildInitStateRecursively(input)
-      }
-    })
-    if (input.name) {
-      initState = { [input.name]: initState }
-    }
-    return initState;
-  };
-
-  getFormElementsRecursively = function (input) {
-    var inputList = []
-    (Array.isArray(input) ? input : input.inputs).forEach(input => {
-      if (input.inputs.length === 0) {
-        inputList = [{ ...input, stateName: input.name }, ...inputList]
-      } else {
-        this.getFormElementsRecursively(input)
-      }
-    })
-    if (input.name) {
-      inputList = inputList.map(inp => ({ ...inp, stateName: `${input.name}.${inp.stateName}` }))
-    }
-    return inputList
-  };
 
   componentDidMount() {
     const { match } = this.props;
@@ -48,24 +20,67 @@ class Form extends Component {
   }
 
   getTaskContract = (task_Id) => {
+    this.setState({ loading: true })
     get(`/bonita/API/bpm/userTask/${task_Id}/contract`, undefined, true).then((res) => {
       const { inputs } = res.data;
-      const initState = this.buildInitStateRecursively(inputs)
-      this.setState({ inputs, form: initState })
+      const initFormState = buildInitStateRecursively(inputs)
+      this.setState({ inputs, form: initFormState, loading: false })
+    }).catch(e => {
+      this.setState({ loading: false })
+      console.log(e)
     });
   };
 
-  render() {
-    const { inputs } = this.state;
-    const inputList = this.getFormElementsRecursively(inputs);
+  handleChange = (value, stateName) => {
+    const { form } = this.state;
+    const nodes = stateName.split('.');
+    var index = 0;
+    const iterator = (formParam) => {
+      if (index === nodes.length - 1) {
+        formParam[nodes[index]] = value;
+      } else {
+        index = index + 1;
+        iterator(formParam[nodes[index - 1]])
+      }
+    };
+    iterator(form);
+    this.setState({ form })
+  };
 
+  getInputValue = (stateName) => {
+    const { form } = this.state;
+    const nodes = stateName.split('.');
+    var result = null;
+    var index = 0;
+    const iterator = (formParam) => {
+      if (index === nodes.length - 1) {
+        result = formParam[nodes[index]] || null;
+      } else {
+        index = index + 1;
+        iterator(formParam[nodes[index - 1]])
+      }
+    };
+    iterator(form);
+    return result;
+  };
+
+  render() {
+    const { inputs, loading } = this.state;
+    const inputList = getFormElementsRecursively(inputs);
+
+    debugger
     return (
       <div>
         <AppLayout title="Form details">
-          <p>hello Form</p>
+          {loading && <Spinner /> }
           {
-            inputs && inputs.map(complexe => {
-              return <Widget {...complexe} />
+            inputList && inputList.map((complex, index) => {
+              return <Widget
+                key={`widget-${index + 1}`}
+                {...complex}
+                handleChange={this.handleChange}
+                value={this.getInputValue(complex.stateName)}
+              />
             })
           }
         </AppLayout>

@@ -9,7 +9,6 @@ const Widget = (props) => {
       return <Integer {...props} />
       break;
     }
-
     case "TEXT": {
       return <Text {...props} />
       break;
