@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import "./taskList.css";
+import "./compiler.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/css/bootstrap.css";
 import { get } from "../../services/apiRest";
@@ -9,8 +9,9 @@ import { AppLayout } from "../../components/AppLayout";
 import { withRouter } from "react-router-dom";
 import { VIEW_FORM_GENERATOR } from "../../constants";
 import Spinner from "../../components/Spinner";
+import ApiService from "../../services/ApiService";
 
-export class TaskList extends Component {
+export class Compiler extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -75,6 +76,19 @@ export class TaskList extends Component {
     };
     return console.log(contract);
   };
+  onFileChangeHandler = (e) => {
+    e.preventDefault();
+    this.setState({ loading: true });
+    this.setState({
+      selectedFile: e.target.files[0]
+    });
+    const formData = new FormData();
+    formData.append("file", this.state.selectedFile);
+    ApiService.upload(formData).then((res) => {
+      console.log(res.data);
+      alert("File uploaded successfully.");
+    });
+  };
 
   render() {
     const { taskList, loading } = this.state;
@@ -90,43 +104,18 @@ export class TaskList extends Component {
                 type="button"
                 disabled={loading}
               >
-                {loading ? "Please wait..." : "Refresh Tasks"}
+                {loading ? "Please wait..." : "Compile"}
               </button>
-              <div className="table-container ">
-                <table className="table table-hover">
-                  <thead className="thead-dark">
-                    <tr>
-                      <th>TaskId</th>
-                      <th>Name</th>
-                      <th>CaseId</th>
-                      <th>Process Name</th>
-                    </tr>
-                  </thead>
-
-                  <tbody className="tbody">
-                    {!loading ? (
-                      taskList.map((task) => {
-                        return (
-                          <tr
-                            className="row-style"
-                            onClick={() => this.handleRowClick(task.id)}
-                          >
-                            <td>{task.id}</td>
-                            <td>{task.name}</td>
-                            <td>{task.caseId}</td>
-                            <td>{task.rootContainerId.displayName}</td>
-                          </tr>
-                        );
-                      })
-                    ) : (
-                      <tr>
-                        <td colSpan="5">Loading...</td>
-                      </tr>
-                    )}
-                  </tbody>
-                </table>
-                {loading && <Spinner />}
+              <div className="form-group files color">
+                <label>Upload Your File </label>
+                <input
+                  type="file"
+                  className="form-control"
+                  name="file"
+                  onChange={this.onFileChangeHandler}
+                />
               </div>
+              {loading && <Spinner />}
             </div>
             <div className="col"></div>
           </div>
@@ -136,4 +125,4 @@ export class TaskList extends Component {
   }
 }
 
-export default withRouter(TaskList);
+export default withRouter(Compiler);
