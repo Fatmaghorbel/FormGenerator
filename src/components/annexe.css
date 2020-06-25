@@ -1,0 +1,23 @@
+.annexe-container {
+    height: calc(100vh - 135px);
+    width: 100% ;
+    background-color: #f5f2f0;
+    padding: 8px;
+    text-align: left;
+    line-height: 12px;
+    font-size: 14px;
+    border: solid 1px #ddd;
+    overflow: scroll;
+}
+
+.annexe-log--error {
+    color: red
+}
+
+.annexe-log--success {
+    color: green
+}
+
+.annexe-log--info {
+    color: blue;
+}

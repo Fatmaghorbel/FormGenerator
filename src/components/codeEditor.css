@@ -1,0 +1,8 @@
+.CodeMirror {
+    font-family: monospace;
+    height: 300px;
+    height: calc(100vh - 135px) !important;
+    color: black;
+    /* scroll-behavior: unset; */
+    direction: ltr;
+}
