@@ -86,7 +86,7 @@ export class Index extends Component {
             className: "annexe-log--success",
           });
           res.data && res.data.bundleUrl && this.addLogLine({
-            content: `Le telechargement de la version de production du projet:  ${END_POINT_URL}/${res.data.srcUrl} .`,
+            content: `Le telechargement de la version de production du projet:  ${END_POINT_URL}/${res.data.bundleUrl} .`,
             className: "annexe-log--success",
           })
           res.data && res.data.srcUrl && this.addLogLine({
