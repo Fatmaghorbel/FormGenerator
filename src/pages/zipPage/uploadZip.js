@@ -17,28 +17,35 @@ export class UploadZip extends Component {
   }
 
   componentDidMount() {}
-  downloadEmployeeData = () => {
-    fetch("http://localhost:8050/download").then((response) => {
-      response.blob().then((blob) => {
-        let url = window.URL.createObjectURL(blob);
-        let a = document.createElement("a");
-        a.href = url;
-        a.download = "sourceApp.zip";
-        a.click();
-      });
-      //window.location.href = response.url;
-    });
-  };
 
-  downloadHandler = (e) => {
+  onFileChangeHandler = (e) => {
+    e.preventDefault();
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const xlmFile = e.target.result;
+      ApiService.upload(xlmFile)
+        .then((res) => {
+          console.log(res);
+          alert("File uploaded successfully.");
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    };
+    reader.readAsText(e.target.files[0]);
+    debugger;
+    this.setState({ loading: true });
+    this.setState({
+      selectedFile: e.target.files[0]
+    });
+    const formData = new FormData();
+    formData.append("file", this.state.selectedFile);
+  };
+  helloHandler = (e) => {
     e.preventDefault();
     this.setState({ loading: true });
-    ApiService.get().then((res) => {
-      let url = window.URL.createObjectURL(res);
-      let a = document.createElement("a");
-      a.href = url;
-      a.download = "SourceApp.zip";
-      a.click();
+
+    ApiService.hello().then((res) => {
       console.log(res.data);
       alert("hello.");
     });
@@ -54,13 +61,11 @@ export class UploadZip extends Component {
               {loading ? "Please wait..." : "Compile"}
               <div className="form-group files color">
                 <label>Upload Your File </label>
-                <button
-                  type="submit"
+                <input
+                  type="file"
                   className="form-control"
-                  onClick={this.downloadEmployeeData}
-                >
-                  Download your Source App
-                </button>
+                  onChange={this.onFileChangeHandler}
+                />
               </div>
               {loading && <Spinner />}
             </div>
