@@ -6,7 +6,7 @@ import "bootstrap/dist/css/bootstrap.css";
 import { BrowserRouter } from "react-router-dom";
 
 ReactDOM.render(
-  <BrowserRouter basename="/bonitaform">
+  <BrowserRouter basename="/compiler">
     <App />
   </BrowserRouter>,
   document.getElementById("root")

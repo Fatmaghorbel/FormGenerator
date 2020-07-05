@@ -1,17 +1,16 @@
 import axios from "axios";
+export const END_POINT_URL = "http://localhost:8050";
 
 class ApiService {
-  upload(data) {
-    return axios.post("http://localhost:8050/upload", data, {
-      headers: { "Content-Type": "text/xml; charset=utf-8" }
+  upload(data, params) {
+    return axios.post(`${END_POINT_URL}/upload`, data, {
+      headers: { "Content-Type": "text/xml; charset=utf-8" },
+      params
     });
   }
 
   download() {
-    return axios.get("http://localhost:8050/download");
-  }
-  hello() {
-    return axios.get("http://localhost:8050/hello");
+    return axios.get(`${END_POINT_URL}/download`);
   }
 }
 

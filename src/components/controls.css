@@ -1,0 +1,29 @@
+.controls-container {
+  height: 200px;
+  width: 100%;
+  background-color: #f5f2f0;
+  border: solid 1px #ddd;
+  display: flex;
+}
+
+.controls-input {
+  font-size: 18px;
+  margin-top: 15px;
+  margin-right: 40px;
+  margin-left: 10px;
+  font-family: "Times New Roman", Times, serif;
+}
+
+.controls-button {
+  height: 50px;
+  margin-top: 15px;
+  margin-right: 30px;
+  width: 100px;
+  font-size: 18px;
+  font-family: "Times New Roman", Times, serif;
+}
+.form-check {
+  margin-right: 100px;
+}
+.form-control-file {
+}

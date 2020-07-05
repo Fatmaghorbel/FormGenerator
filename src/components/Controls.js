@@ -1,28 +1,25 @@
-import React, { Component } from "react";
-import "./interface.css";
+import React, { Fragment } from "react";
+import "./controls.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/css/bootstrap.css";
-import { get } from "../../services/apiRest";
-import { setCookie } from "../../services/param";
-import Navbar from "../../components/navbar";
-import { AppLayout } from "../../components/AppLayout";
-import { withRouter } from "react-router-dom";
-import { VIEW_FORM_GENERATOR } from "../../constants";
-import Spinner from "../../components/Spinner";
-import DownloadZip from "./downloadZip";
-import UploadZip from "./uploadZip";
+import Modal from "./Modal";
+import Popover from "./Popover";
 
-export class Interface extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
-
-  componentDidMount() {}
-
-  render() {
-    const { taskList, loading } = this.state;
-    return (
+const Controls = (props) => {
+  const {
+    fileChangeHandler,
+    resetClickHandler,
+    submitClickHandler,
+    withBundle,
+    withSrc,
+    setWithBundle,
+    setWithSrc,
+    isactive,
+    checkedbox
+  } = props;
+  debugger;
+  return (
+    <div>
       <div className="controls-container">
         {/*<div className="row">*/}
         {/*  <div className="col"></div>*/}
@@ -36,9 +33,7 @@ export class Interface extends Component {
           className="form-control-file controls-input"
           onChange={fileChangeHandler}
         />
-        <div>
-          <label> Click here to dowload file</label>
-        </div>
+
         <div className="form-check controls-input">
           <label className="form-check-label">
             <input
@@ -53,7 +48,7 @@ export class Interface extends Component {
         <div className="form-check controls-input">
           <label className="form-check-label">
             <input
-              type="radio"
+              type="checkbox"
               className="form-check-input"
               checked={withSrc}
               onChange={setWithSrc}
@@ -86,21 +81,28 @@ export class Interface extends Component {
         >
           Reset
         </button>
-        {/*<button
-        type="button"
-        className="btn btn-primary btn-sm controls-button"
-        onClick={submitClickHandler}
-      >
-        Soumettre
-      </button> */}
-
-        {/*    </div>*/}
-        {/*    {loading && <Spinner />}*/}
-        {/*  </div>*/}
-        {/*</div>*/}
       </div>
-    );
-  }
-}
+      <div class="card w-50 p-3">
+        <h5 class="card-header bg-danger text-white ">
+          What is Bonita React Generator?
+        </h5>
+        <div class="card-body ">
+          <h5 class="card-title"></h5>
+          <p class="card-text text-danger font-weight-bold">
+            This tool allows you to generate a React Application based on a
+            Contract !
+          </p>
+          <p class="card-text text-danger">
+            If you wanna know more details about the contract click on the
+            button below
+          </p>
+          <button href="#" class="btn btn-primary">
+            Show more contract details
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
 
-export default withRouter(Interface);
+export default Controls;
