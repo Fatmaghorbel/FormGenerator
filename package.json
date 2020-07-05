@@ -10,7 +10,7 @@
     "camaro": "^6.0.2",
     "classnames": "^2.2.6",
     "codemirror": "^5.55.0",
-    "jquery": "^3.4.1",
+    "jquery": "^3.5.0",
     "react": "^16.13.1",
     "react-codemirror2": "^7.2.1",
     "react-dom": "^16.13.1",
