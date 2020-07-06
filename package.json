@@ -6,7 +6,7 @@
   "dependencies": {
     "@popperjs/core": "^2.4.4",
     "axios": "^0.19.2",
-    "bootstrap": "^4.1.1",
+    "bootstrap": "^4.3.1",
     "bs-stepper": "^1.7.0",
     "camaro": "^6.0.2",
     "classnames": "^2.2.6",
