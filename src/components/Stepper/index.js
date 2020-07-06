@@ -38,7 +38,6 @@ class Stepper extends React.Component {
       )
     })
 
-    // 9addech ?
 
   }
 
@@ -87,4 +86,3 @@ class Stepper extends React.Component {
 
 export default Stepper;
 
-// chnow bech n7ottou f step1 ? upload ?

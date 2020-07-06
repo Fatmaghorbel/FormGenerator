@@ -47,4 +47,3 @@ const InfoModal = ({modalRef}) => {
 
 export default InfoModal;
 
-// Oui , heka f chnowa 5ammemt

@@ -4,7 +4,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/css/bootstrap.css";
 import Modal from "./Modal";
 import Popover from "./Popover";
-import InfoModal from './InfoModal';
+import InfoModal from "./InfoModal";
 
 const Controls = (props) => {
   const {
@@ -28,16 +28,10 @@ const Controls = (props) => {
         {/*    <div className="form-group files color">*/}
         {/*      <label>Upload Your File </label>*/}
 
-        <input
-          type="file"
-          className="form-control-file controls-input"
-          onChange={fileChangeHandler}
-        />
-
         <div className="form-check controls-input">
           <label className="form-check-label">
             <input
-              type="radio"
+              type="checkbox"
               className="form-check-input"
               checked={withBundle}
               onChange={setWithBundle}
@@ -82,7 +76,7 @@ const Controls = (props) => {
           Reset
         </button>
       </div>
-      <InfoModal/>
+      <InfoModal />
     </div>
   );
 };

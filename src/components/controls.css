@@ -1,9 +1,10 @@
 .controls-container {
-  height: 200px;
+  height: 100px;
   width: 100%;
-  background-color: #f5f2f0;
+  background-color: floralwhite;
   border: solid 1px #ddd;
   display: flex;
+  position: center;
 }
 
 .controls-input {

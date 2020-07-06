@@ -1,31 +1,34 @@
 .workspace-layout {
-    padding: 0
+  padding: 0;
 }
 
 .workspace-container {
-    width: 100%;
-    margin: 0;
-    max-width: 100%;
-    padding: 0px
+  width: 100%;
+  margin: 0;
+  max-width: 100%;
+  padding: 0px;
 }
 
 .workspace-body-container {
-    box-shadow: 0 4px 2px -2px #ccc;
+  box-shadow: 0 4px 2px -2px #ccc;
 }
-
+.workspace-body-container-log {
+  box-shadow: 0 4px 2px -2px #ccc;
+  margin-top: 1%;
+  padding-top: 60%;
+}
 .workspace-body-section {
-    height: 100%;
-    float: left;
-    width: 100%;
+  height: 100%;
+  float: left;
+  width: 100%;
 }
 
 .workspace-body--main {
-    height: calc(((100vh - 57px) * 68) / 100);;
-    float: left;
-    width: 100%;
+  height: calc(((100vh - 57px) * 68) / 100);
+  float: left;
+  width: 100%;
 }
 
 .workspace-body--annexe {
-    height: calc(((100vh - 57px) * 28) / 100);;
+  height: calc(((100vh - 57px) * 28) / 100);
 }
-
