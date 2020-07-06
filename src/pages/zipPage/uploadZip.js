@@ -33,7 +33,6 @@ export class UploadZip extends Component {
         });
     };
     reader.readAsText(e.target.files[0]);
-    debugger;
     this.setState({ loading: true });
     this.setState({
       selectedFile: e.target.files[0]

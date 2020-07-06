@@ -4,6 +4,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/css/bootstrap.css";
 import Modal from "./Modal";
 import Popover from "./Popover";
+import InfoModal from './InfoModal';
 
 const Controls = (props) => {
   const {
@@ -14,10 +15,9 @@ const Controls = (props) => {
     withSrc,
     setWithBundle,
     setWithSrc,
-    isactive,
+    isActive,
     checkedbox
   } = props;
-  debugger;
   return (
     <div>
       <div className="controls-container">
@@ -56,7 +56,7 @@ const Controls = (props) => {
             Générer le code source
           </label>
         </div>
-        {!isactive ? (
+        {!isActive ? (
           <button
             type="button"
             disabled
@@ -82,25 +82,7 @@ const Controls = (props) => {
           Reset
         </button>
       </div>
-      <div class="card w-50 p-3">
-        <h5 class="card-header bg-danger text-white ">
-          What is Bonita React Generator?
-        </h5>
-        <div class="card-body ">
-          <h5 class="card-title"></h5>
-          <p class="card-text text-danger font-weight-bold">
-            This tool allows you to generate a React Application based on a
-            Contract !
-          </p>
-          <p class="card-text text-danger">
-            If you wanna know more details about the contract click on the
-            button below
-          </p>
-          <button href="#" class="btn btn-primary">
-            Show more contract details
-          </button>
-        </div>
-      </div>
+      <InfoModal/>
     </div>
   );
 };

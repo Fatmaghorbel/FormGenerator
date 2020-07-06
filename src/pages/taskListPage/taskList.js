@@ -59,7 +59,6 @@ export class TaskList extends Component {
   handleRowClick = (id) => {
     const { history } = this.props;
     history.push(`${VIEW_FORM_GENERATOR}/${id}`);
-    debugger;
   };
 
   createContractObject = (inputName, inputType) => {

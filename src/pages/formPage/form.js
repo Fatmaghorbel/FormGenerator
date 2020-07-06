@@ -79,7 +79,6 @@ class Form extends Component {
     const { inputs, loading } = this.state;
     const inputList = getFormElementsRecursively(inputs);
 
-    debugger;
     return (
       <div>
         <AppLayout title="Form details">

@@ -18,3 +18,14 @@
     float: left;
     width: 100%;
 }
+
+.workspace-body--main {
+    height: calc(((100vh - 57px) * 68) / 100);;
+    float: left;
+    width: 100%;
+}
+
+.workspace-body--annexe {
+    height: calc(((100vh - 57px) * 28) / 100);;
+}
+

@@ -13,22 +13,26 @@ import Controls from "../../components/Controls";
 import Annexe from "../../components/Annexe";
 import CodeEditor from "../../components/CodeEditor";
 import { validateXML } from "../../services/xml";
+import Stepper from '../../components/Stepper/index';
+import InfoModal from '../../components/InfoModal';
 
 const initState = {
   xmlContent: "<!--Veuillez déposer votre code XML du processus ici-->",
   withBundle: false,
   withSrc: false,
   logList: [],
-  isActive: true
+  isActive: true,
 };
 
 export class Index extends Component {
   constructor(props) {
     super(props);
     this.state = initState;
+    this.modelRef = React.createRef();
   }
 
-  componentDidMount() {}
+  componentDidMount() {
+  }
 
   fileChangeHandler = (e) => {
     e.preventDefault();
@@ -49,8 +53,9 @@ export class Index extends Component {
     reader.readAsText(e.target.files[0]);
     this.setState({ loading: true });
     this.setState({
-      selectedFile: e.target.files[0]
+      selectedFile: e.target.files[0],
     });
+    this.modelRef.current.modal({show: true})
     const formData = new FormData();
     formData.append("file", this.state.selectedFile);
   };
@@ -59,24 +64,23 @@ export class Index extends Component {
     this.setState(initState, () => {
       this.addLogLine({
         content: "Réinitialiser le workspace.",
-        className: "annexe-log--info"
+        className: "annexe-log--info",
       });
     });
   };
 
   submitClickHandler = () => {
     const { xmlContent, withBundle, withSrc } = this.state;
-    debugger;
     const { valid, message: validationMessage } = validateXML(xmlContent);
     if (!valid) {
       this.addLogLine({
         content: validationMessage,
-        className: "annexe-log--error"
+        className: "annexe-log--error",
       });
     } else {
       this.addLogLine({
         content: "Soumission en cours.",
-        className: "annexe-log--inf"
+        className: "annexe-log--inf",
       });
       ApiService.upload(xmlContent, { bundle: withBundle, src: withSrc })
         .then((res) => {
@@ -86,28 +90,28 @@ export class Index extends Component {
           console.log(res);
           this.addLogLine({
             content: "Le process a été soumis avec succès.",
-            className: "annexe-log--success"
+            className: "annexe-log--success",
           });
 
           res.data &&
-            res.data.bundleUrl &&
-            this.addLogLine({
-              content: `Le telechargement de la version de production du projet:  .`,
-              url: ` ${END_POINT_URL}${res.data.bundleUrl}`,
-              className: "annexe-log--success"
-            });
+          res.data.bundleUrl &&
+          this.addLogLine({
+            content: `Le telechargement de la version de production du projet:  .`,
+            url: ` ${END_POINT_URL}${res.data.bundleUrl}`,
+            className: "annexe-log--success",
+          });
           res.data &&
-            res.data.srcUrl &&
-            this.addLogLine({
-              content: `Le telechargement du code source du projet:   .`,
-              url: `${END_POINT_URL}${res.data.srcUrl}`,
-              className: "annexe-log--success"
-            });
+          res.data.srcUrl &&
+          this.addLogLine({
+            content: `Le telechargement du code source du projet:   .`,
+            url: `${END_POINT_URL}${res.data.srcUrl}`,
+            className: "annexe-log--success",
+          });
         })
         .catch((e) => {
           this.addLogLine({
             content: "L'operation de soumission du process a été échouée.",
-            className: "annexe-log--success"
+            className: "annexe-log--success",
           });
           console.log(e);
         });
@@ -125,9 +129,9 @@ export class Index extends Component {
       content: withBundle
         ? "Désactivation de la generation d'une version de production."
         : "Activation de la generation d'une version de production.",
-      className: "annexe-log--info"
+      className: "annexe-log--info",
     });
-    this.setState({ withBundle: !withBundle, isactive: true });
+    this.setState({ withBundle: !withBundle, isActive: true });
   };
 
   setWithSrc = () => {
@@ -136,68 +140,54 @@ export class Index extends Component {
       content: withSrc
         ? "Désactivation de la generation du code source."
         : "Activation de la generation du code source.",
-      className: "annexe-log--info"
+      className: "annexe-log--info",
     });
-    this.setState({ withSrc: !withSrc, isactive: true });
+    this.setState({ withSrc: !withSrc, isActive: true });
   };
 
   render() {
-    const { xmlContent, withBundle, withSrc, logList, isactive } = this.state;
+    const { xmlContent, withBundle, withSrc, logList, isActive } = this.state;
 
     return (
       <AppLayout title="Bonita React Generator" classes="workspace-layout">
         <div className="container workspace-container">
-          <Controls
-            withBundle={withBundle}
-            withSrc={withSrc}
-            setWithBundle={this.setWithBundle}
-            setWithSrc={this.setWithSrc}
-            fileChangeHandler={this.fileChangeHandler}
-            resetClickHandler={this.resetClickHandler}
-            submitClickHandler={this.submitClickHandler}
-            isactive={isactive}
-          />
-          {/*<div className="row">*/}
-          {/*  <div className="col"></div>*/}
-          {/*  <div className="col-8">*/}
-          {/*    {loading ? "Please wait..." : "Compile"}*/}
-          {/*    <div className="form-group files color">*/}
-          {/*      <label>Upload Your File </label>*/}
-          {/*      <input*/}
-          {/*        type="file"*/}
-          {/*        className="form-control"*/}
-          {/*        onChange={this.onFileChangeHandler}*/}
-          {/*      />*/}
-          {/*    </div>*/}
-          {/*    {loading && <Spinner />}*/}
-          {/*  </div>*/}
-          {/*</div>*/}
+          <div className="workspace-body--main">
+            <h5 className="card-header bg-danger text-white ">
+              What is Bonita React Generator?
+            </h5>
+            {/*<div className="card-body ">*/}
+            <h5 className="card-title"></h5>
+            <p className="card-text text-danger font-weight-bold">
+              This tool allows you to generate a React Application based on a
+              Contract !
+            </p>
+            <p className="card-text text-danger">
+              If you wanna know more details about the contract click on the
+              button below
+            </p>
+            <Stepper steps={[
+              {
+                title: "Upload XML File", content: <div><input
+                  type="file"
+                  className="form-control-file controls-input"
+                  onChange={this.fileChangeHandler}
+                /></div>,
+              },
+              { title: "Choose Application type", content: <p>Step3</p> },
+              { title: "Confirmation and submission", content: <p>Step4</p> },
+            ]} />
+          </div>
           <div className="workspace-body-container">
             <div className="row">
-              <div className="col-8 pr-0">
-                <section className="workspace-body-section">
-                  <CodeEditor
-                    value={xmlContent}
-                    onBeforeChange={(editor, data, value) => {
-                      debugger;
-                      this.setState({ xmlContent: value });
-                    }}
-                    onChange={(editor, value) => {
-                      debugger;
-                      // this.setState({ xmlContent: value })
-                      console.log("controlled");
-                    }}
-                  />
-                </section>
-              </div>
-              <div className="col-4  pl-0">
-                <section className="workspace-body-section">
+              <div className="col-12  pl-0">
+                <section className="workspace-body-section workspace-body--annexe">
                   <Annexe logList={logList} />
                 </section>
               </div>
             </div>
           </div>
         </div>
+        <InfoModal xmlContent={xmlContent} modalRef={this.modelRef}/>
       </AppLayout>
     );
   }
