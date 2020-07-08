@@ -1,9 +1,9 @@
 .controls-container {
   height: 100px;
   width: 100%;
-  background-color: floralwhite;
+  padding: 8px;
   border: solid 1px #ddd;
-  display: flex;
+  /*display: flex;*/
   position: center;
 }
 
@@ -26,5 +26,10 @@
 .form-check {
   margin-right: 100px;
 }
+
+controls-check {
+  margin: 8px;
+}
+
 .form-control-file {
 }

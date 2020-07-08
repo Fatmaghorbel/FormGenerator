@@ -1,3 +1,7 @@
 .nav-bar__brand-img {
     margin-right: 8px;
 }
+
+.nav-bar-container {
+    text-align: left
+}

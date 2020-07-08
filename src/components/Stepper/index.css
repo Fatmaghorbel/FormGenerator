@@ -1,0 +1,5 @@
+.stepper-controller-container {
+    position: fixed;
+    top: calc(((100vh - 57px) * 68) / 100);
+    right: 36px;
+}

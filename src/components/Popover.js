@@ -1,6 +1,6 @@
 import React from "react";
 import "jquery/dist/jquery.slim";
-import "@popperjs/core/dist/umd/popper.min.js";
+// import "@popperjs/core/dist/umd/popper.min.js";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/css/bootstrap.css";
 

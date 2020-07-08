@@ -14,8 +14,6 @@
 }
 .workspace-body-container-log {
   box-shadow: 0 4px 2px -2px #ccc;
-  margin-top: 1%;
-  padding-top: 60%;
 }
 .workspace-body-section {
   height: 100%;
@@ -31,4 +29,8 @@
 
 .workspace-body--annexe {
   height: calc(((100vh - 57px) * 28) / 100);
+}
+
+.workspace-body--main__info {
+  text-align: center
 }

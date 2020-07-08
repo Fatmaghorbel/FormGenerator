@@ -6,7 +6,8 @@ import './nav-bar.css'
 
 const Navbar = ({title}) => {
   return (
-    <nav className="navbar navbar-dark bg-dark">
+    <div className="nav-bar-container">
+    <nav className="navbar navbar-dark bg-dark ">
       <a className="navbar-brand " href="#">
         <img
           src="/bonita-logo.png"
@@ -18,6 +19,7 @@ const Navbar = ({title}) => {
         {title}
       </a>
     </nav>
+      </div>
   );
 };
 

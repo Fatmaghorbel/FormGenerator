@@ -1,11 +1,11 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/css/bootstrap.css";
 import { AppLayout } from "../../components/AppLayout";
 import { withRouter } from "react-router-dom";
 import Spinner from "../../components/Spinner";
 import ApiService, { END_POINT_URL } from "../../services/ApiService";
-import Modal from "../../components/Modal";
+// import Modal from "../../components/Modal";
 import Popover from "../../components/Popover";
 
 
@@ -24,26 +24,45 @@ const initState = {
   withBundle: false,
   withSrc: false,
   logList: [],
-  isActive: true
+  isActive: true,
+  showModal: false,
 };
 
 export class Index extends Component {
   constructor(props) {
     super(props);
     this.state = initState;
-    this.modelRef = React.createRef();
     this.step1Ref = React.createRef();
   }
 
-  componentDidMount() {}
+  componentDidMount() {
+    window.$("#contractModal").on('hidden.bs.modal', this.handleHideModal);
+    window.$("#inputGroupFile01").on("change", function () {
+      var fileName = window.$(this).val().split("\\").pop();
+      window.$(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+    });
+  };
+
+  handleXmlContentChange(value) {
+    this.setState({ xmlContent: value })
+  }
 
   fileChangeHandler = (e) => {
     e.preventDefault();
+    this.addLogLine({
+      content: "Loading contact file.",
+      className: "annexe-log--info",
+    });
     const reader = new FileReader();
     this.setState({ xmlFile: e.target.files[0].name, xmlUploaded: true });
     reader.onload = (e) => {
       const xlmFile = e.target.result;
       this.setState({ xmlContent: xlmFile });
+      this.handleShowModal();
+      this.addLogLine({
+        content: "Contract file loaded.",
+        className: "annexe-log--success",
+      });
       // ApiService.upload(xlmFile)
       //   .then((res) => {
       //     console.log(res);
@@ -56,9 +75,9 @@ export class Index extends Component {
     reader.readAsText(e.target.files[0]);
     this.setState({ loading: true });
     this.setState({
-      selectedFile: e.target.files[0]
+      selectedFile: e.target.files[0],
     });
-    this.modelRef.current.modal({ show: true });
+    this.modalRef.current.modal({ show: true });
     const formData = new FormData();
     formData.append("file", this.state.selectedFile);
   };
@@ -66,24 +85,24 @@ export class Index extends Component {
   resetClickHandler = () => {
     this.setState(initState, () => {
       this.addLogLine({
-        content: "Réinitialiser le workspace.",
-        className: "annexe-log--info"
+        content: "Reset the workspace.",
+        className: "annexe-log--info",
       });
     });
   };
 
-  submitClickHandler = () => {
+  handleSubmit = () => {
     const { xmlContent, withBundle, withSrc } = this.state;
     const { valid, message: validationMessage } = validateXML(xmlContent);
     if (!valid) {
       this.addLogLine({
         content: validationMessage,
-        className: "annexe-log--error"
+        className: "annexe-log--error",
       });
     } else {
       this.addLogLine({
-        content: "Soumission en cours.",
-        className: "annexe-log--inf"
+        content: "Submission in progress ...",
+        className: "annexe-log--inf",
       });
       ApiService.upload(xmlContent, { bundle: withBundle, src: withSrc })
         .then((res) => {
@@ -92,29 +111,29 @@ export class Index extends Component {
           }
           console.log(res);
           this.addLogLine({
-            content: "Le process a été soumis avec succès.",
-            className: "annexe-log--success"
+            content: "The process has been successfully submitted.",
+            className: "annexe-log--success",
           });
 
           res.data &&
-            res.data.bundleUrl &&
-            this.addLogLine({
-              content: `Le telechargement de la version de production du projet:  .`,
-              url: ` ${END_POINT_URL}${res.data.bundleUrl}`,
-              className: "annexe-log--success"
-            });
+          res.data.bundleUrl &&
+          this.addLogLine({
+            content: `Downloading the production version of the project:.`,
+            url: ` ${END_POINT_URL}${res.data.bundleUrl}`,
+            className: "annexe-log--success",
+          });
           res.data &&
-            res.data.srcUrl &&
-            this.addLogLine({
-              content: `Le telechargement du code source du projet:   .`,
-              url: `${END_POINT_URL}${res.data.srcUrl}`,
-              className: "annexe-log--success"
-            });
+          res.data.srcUrl &&
+          this.addLogLine({
+            content: `Downloading the project source code:.`,
+            url: `${END_POINT_URL}${res.data.srcUrl}`,
+            className: "annexe-log--success",
+          });
         })
         .catch((e) => {
           this.addLogLine({
-            content: "L'operation de soumission du process a été échouée.",
-            className: "annexe-log--success"
+            content: "The process submission operation has failed.",
+            className: "annexe-log--error",
           });
           console.log(e);
         });
@@ -130,9 +149,9 @@ export class Index extends Component {
     const { withBundle } = this.state;
     this.addLogLine({
       content: withBundle
-        ? "Désactivation de la generation d'une version de production."
-        : "Activation de la generation d'une version de production.",
-      className: "annexe-log--info"
+        ? "Deactivation of generation of a production version."
+        : "Activation of the generation of a production version.",
+      className: "annexe-log--info",
     });
     this.setState({ withBundle: !withBundle, isActive: true });
   };
@@ -141,12 +160,24 @@ export class Index extends Component {
     const { withSrc } = this.state;
     this.addLogLine({
       content: withSrc
-        ? "Désactivation de la generation du code source."
-        : "Activation de la generation du code source.",
-      className: "annexe-log--info"
+        ? "Deactivation of source code generation."
+        : "Activation of the source code generation.",
+      className: "annexe-log--info",
     });
     this.setState({ withSrc: !withSrc, isActive: true });
   };
+
+  handleHideModal() {
+    this.setState({
+      showModal: false,
+    })
+    window.$("#contractModal").modal('hide');
+  }
+
+  handleShowModal() {
+    this.setState({ showModal: true });
+    window.$("#contractModal").modal('show');
+  }
 
   render() {
     const {
@@ -155,69 +186,70 @@ export class Index extends Component {
       withSrc,
       logList,
       isActive,
-      xmlUploaded
+      xmlUploaded,
+      showModal,
     } = this.state;
 
     return (
       <AppLayout title="Bonita React Generator" classes="workspace-layout">
         <div className="container workspace-container">
           <div className="workspace-body--main">
-            <h5 className="card-header bg-danger text-white ">
-              What is Bonita React Generator?
-            </h5>
-            {/*<div className="card-body ">*/}
-            <h5 className="card-title"></h5>
-            <p className="card-text text-danger font-weight-bold">
-              This tool allows you to generate a React Application based on a
-              Contract !
-            </p>
-            <p className="card-text text-danger">
-              If you wanna know more details about the contract click on the
-              button below
-            </p>
+            <div className="workspace-body--main__info">
+              <h5 className="card-header bg-danger text-white ">
+                What is Bonita React Generator?
+              </h5>
+              {/*<div className="card-body ">*/}
+              <h5 className="card-title"></h5>
+              <p className="card-text text-danger font-weight-bold">
+                This tool allows you to generate a React Application based on a
+                Contract !
+              </p>
+              <p className="card-text text-danger">
+                If you wanna know more details about the contract click on the
+                button below
+              </p>
+            </div>
             <Stepper
+              handleSubmit={this.handleSubmit}
+              addLogLine={this.addLogLine}
               steps={[
                 {
                   title: "Upload XML File",
                   content: (
                     <div>
-                      <input
-                        type="file"
-                        className="form-control-file controls-input"
-                        onChange={this.fileChangeHandler}
-                        ref={this.step1Ref}
-                      />
-                      {xmlUploaded ? <Modal /> : null}
-                      {xmlUploaded && this.step1Ref.current ? (
-                        <div className="workspace-body-container">
-                          <div className="row">
-                            <div className="col-8 pr-0">
-                              <section className="workspace-body-section">
-                                <CodeEditor
-                                  value={xmlContent}
-                                  onBeforeChange={(editor, data, value) => {
-                                    debugger;
-                                    this.setState({ xmlContent: value });
-                                  }}
-                                  onChange={(editor, value) => {
-                                    debugger;
-                                    // this.setState({ xmlContent: value })
-                                    console.log("controlled");
-                                  }}
-                                />
-                              </section>
-                            </div>
-                          </div>
+
+                      <div class="input-group mb-3">
+                        <div className="input-group-prepend">
+                          <button className="btn btn-outline-secondary" type="button"
+                                  onClick={() => this.handleShowModal()}
+                                  id="inputGroupFileAddon03">Edit
+                          </button>
                         </div>
-                      ) : null}
+                        <div class="custom-file">
+                          <input type="file" class="custom-file-input" id="inputGroupFile01"
+                                 aria-describedby="inputGroupFileAddon01" onChange={this.fileChangeHandler} />
+                          <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+                        </div>
+                      </div>
                     </div>
-                  )
+                  ),
                 },
                 {
                   title: "Choose Application type",
-                  content: <Controls />
+                  content: <Controls withBundle={withBundle}
+                                     withSrc={withSrc} setWithBundle={this.setWithBundle}
+                                     setWithSrc={this.setWithSrc} />,
                 },
-                { title: "Confirmation and submission", content: <p>Step4</p> }
+                {
+                  title: "Confirmation and submission",
+                  content: (<Fragment><p className="card-text text-info font-weight-bold">
+                      Do you want to submit the request?
+                    </p>
+                      <p className="card-text text-info">
+                        If you have selected the bundle option, the process may take a few minutes.
+                      </p></Fragment>
+                  ),
+                },
               ]}
             />
           </div>
@@ -232,7 +264,10 @@ export class Index extends Component {
             </div>
           </div>
         </div>
-        <InfoModal xmlContent={xmlContent} modalRef={this.modelRef} />
+        {showModal && <InfoModal xmlContent={xmlContent}
+                                 handleXmlContentChange={() => this.handleXmlContentChange}
+                                 addLogLine={this.addLogLine}
+                                 handleHideModal={() => this.handleHideModal()} />}
       </AppLayout>
     );
   }
