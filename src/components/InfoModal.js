@@ -4,7 +4,7 @@ import CodeEditor from './CodeEditor';
 const VIEWS = {
   CONFIRMATION_VIEW: "CONFIRMATION_VIEW",
   EDIT_VIEW: "EDIT_VIEW",
-  SUBMIT_SUCCESS_VIEW: "SUBMIT_SUCCESS_VIEW"
+  SUBMIT_SUCCESS_VIEW: "SUBMIT_SUCCESS_VIEW",
 }
 
 class InfoModal extends React.Component {
@@ -27,7 +27,9 @@ class InfoModal extends React.Component {
   }
 
   handleSave() {
-    const { xmlContentStaged, handleXmlContentChange, addLogLine, handleHideModal } = this.props;
+    const { handleXmlContentChange, addLogLine, handleHideModal } = this.props;
+    const { xmlContentStaged } = this.state;
+    debugger
     handleXmlContentChange(xmlContentStaged);
     addLogLine({
       content: "XML content edited and saved with success",
@@ -54,7 +56,7 @@ class InfoModal extends React.Component {
               <EditXmlView handleViewChange={(view) => this.handleViewChange(view)}
                            xmlContentStaged={xmlContentStaged} {...this.props}
                            handleXmlContentStagedChange={(value) => this.handleXmlContentStagedChange(value)}
-                           handleXmlContentStaged={(value) => this.handleXmlContentStaged(value)}
+                // handleXmlContentStaged={(value) => this.handleXmlContentStagedChange(value)}
                            handleSave={() => this.handleSave()} />}
             </div>
           </div>

@@ -265,7 +265,7 @@ export class Index extends Component {
           </div>
         </div>
         {showModal && <InfoModal xmlContent={xmlContent}
-                                 handleXmlContentChange={() => this.handleXmlContentChange}
+                                 handleXmlContentChange={(value) => this.handleXmlContentChange(value)}
                                  addLogLine={this.addLogLine}
                                  handleHideModal={() => this.handleHideModal()} />}
       </AppLayout>
