@@ -5,7 +5,7 @@
   "private": true,
   "dependencies": {
     "@popperjs/core": "^2.4.4",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "bootstrap": "^4.1.1",
     "bs-stepper": "^1.7.0",
     "camaro": "^6.0.2",
